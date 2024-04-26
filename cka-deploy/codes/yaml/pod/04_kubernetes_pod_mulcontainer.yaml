@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: xxx-nginx
+spec:
+  containers:
+  - name: nginx
+    image: kubernetes-register.xxxx.com/xxxx/nignx_web:v0.1
+    volumeMounts:
+    - name: nginx-index
+      mountPath: /usr/share/nginx/html
+  - name: change-index
+    image: 10.0.10.100:8443/busybox/busybox:1.28.3
+    command: ['sh', '-c', 'for i in $(seq 100); do echo index-$i > /testdir/indiex.html; sleep 2; done']
+    volumeMounts:
+    - name: nginx-index
+      mountPath: /testdir
+  volumes:
+  - name: nginx-index
+    emptyDir: {}

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cka-httpget-check
+spec:
+  containers:
+  - name: nginx-web
+    image: kubernetes-register.xxxx.com/xxxx/nginx_web:v0.1
+    # 定制容器服务可用性探测
+    readinessProbe:
+      httpGet:
+        port: 80 # 设定为存在的端口
+    # 定制Pod对象可用性探测
+    livenessProbe:
+      httpGet:
+        port: 80 # 设定为存在的端口

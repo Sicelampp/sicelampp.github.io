@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lifecycle-demo2
+spec:
+  containers:
+  - name: lifecycle-demo2-container
+    image: 10.0.10.100:8443/nginx/nginx:1.23.1
+    imagePullPolicy: IfNotPresent
+    lifecycle:
+      preStop:
+        exec:
+          command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+
+#java应用的启动和停止都需要时间，为了更加优雅的停止，可以通过pidof获取到java进程ID，循环通过kill命令往PID发送SIGTERM信号。
+#    lifecycle:
+#        preStop:
+#            exec:
+#                command: ["/bin/bash","-c","PID=`pidof java` && kill -SIGTERM $PID && while ps -p $PID > /dev/null;do sleep 1; done;"]

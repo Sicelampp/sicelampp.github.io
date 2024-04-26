@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: xxxx-limitrequest
+spec:
+  containers:
+  - name: nginx-web
+    image: kubernetes-register.xxxx.com/xxxx/nginx_web:v0.1
+    resources:
+      requests:
+        memory: "600Mi"
+        cpu: "500m" # CPU单位，将1个CPU等于1000m，500m相当于0.5个CPU
+      limits:
+        memory: "700Mi"
+        cpu: "600m"

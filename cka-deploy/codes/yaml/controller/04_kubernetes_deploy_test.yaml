@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xxxx-deployment
+spec:
+  minReadySeconds: 0
+  replicas: 3
+  selector:
+    matchLabels:
+      app: deploy-test
+  template:
+    metadata:
+      labels:
+        app: deploy-test
+    spec:
+      containers:
+        - name: nginx-web
+          image: kubernetes-register.xxxx.com/xxxx/nginx_web:v0.1
+          imagePullPolicy: Always

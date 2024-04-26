@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cka-tcpsocket-check
+spec:
+  containers:
+  - name: nginx-web
+    image: kubernetes-register.xxxx.com/xxxx/nginx_web:v0.1
+    # 定制容器服务可用性探测
+    readinessProbe:
+      tcpSocket:
+        port: 888 # 设定为不存在的端口
+    # 定制Pod对象可用性探测
+    livenessProbe:
+      tcpSocket:
+        port: 888 # 设定为不存在的端口

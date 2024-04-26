@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cka-label-nginx-1
+  labels:
+    app: nginx
+    role: web
+spec:
+  containers:
+    - name: nginx-web-1
+      image: 10.0.10.100:8443/nginx/nginx_web:v0.1
+      imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cka-label-nginx-2
+  labels:
+    app: nginx
+    role: web
+spec:
+  containers:
+    - name: nginx-web-2
+      image: 10.0.10.100:8443/nginx/nginx_web:v0.1
+      imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cka-label-django-1
+  labels:
+    app: django
+    role: web
+spec:
+  containers:
+    - name: nginx-django-1
+      image: 10.0.10.100:8443/nginx/django_web:v0.1
+      imagePullPolicy: Always
+---

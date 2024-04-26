@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lifecycle-demo1
+spec:
+  containers:
+  - name: lifecycle-demo1-container
+    image: 10.0.10.100:8443/nginx/nginx:1.23.1
+    imagePullPolicy: IfNotPresent
+    lifecycle:
+      postStart:
+        exec:
+          command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+##使用shell连接到Pod里的容器：
+#  [root@k8s-client-17 yaml_hook]# kubectl exec -it lifecycle-demo3 -- /bin/bash
+#    root@lifecycle-demo3:/# cat /usr/share/message
+#    Hello from the postStart handler

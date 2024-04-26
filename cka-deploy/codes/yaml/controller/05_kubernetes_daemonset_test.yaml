@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cka-deployment
+  labels:
+    app: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      name: prometheus-node-exporter
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus-node-exporter
+          image: 10.0.10.100:8443/prometheus/node-exporter:v1.7.0
+          ports:
+            - name: prom-node-exp
+              containerPort: 9100
+              hostPort: 9100
+      hostNetwork: true
+      hostPID: true

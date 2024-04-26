@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envoy-sidecar-configmap
+data:
+  envoy.yaml: |
+    static_resources:
+      listeners:
+        name: listener
+        address:
+          socket_address: { address: 0.0.0.0, port_vaule: 80 }
+        fiter_chains:
+        - filters:
+          - name: envoy.tcp_proxy
+            typed_config:
+              "@type": typpe.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+              stat_prefix: tcp
+              cluster: local_cluster
+      clusters:
+      - name: local_cluster
+        type: STATIC
+        lb_policy: ROUND_ROBIN
+        load_assignment:
+          cluster_name: local_cluster
+          endpoints:
+          - lb_endpoints:
+            - endpoint:
+              address:
+                sopcket_address: { address: 127.0.0.1, port_vaule: 8080 }
+            - endpoint:
+              address:
+                sopcket_address: { address: 127.0.0.1, port_vaule: 8000 }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cka-sidecar
+spec:
+  containers:
+  - name: envoysidecar
+    image: kubernetes-register.xxxx.com/xxxx/envoy:v1.24.1
+    volumeMounts:
+    - name: envoyconf
+      mountPath: /etc/envoy/
+      readOnly: true
+    env:
+    - name: "ENVOY_UID"
+      value: "0"
+    - name: "ENVOY_GID"
+      value: "0"
+  - name: django
+    image: kubernetes-register.xxxx.com/xxxx/django_web:v0.1
+    ports:
+      - containerPort: 8000
+  - name: tomcat
+    image: kubernetes-register.xxxx.com/xxxx/tomcat_web:v0.1
+    ports:
+      - containerPort: 8080
+  volumes:
+  - name: envoyconf
+    configMap:
+      name: envoy-sidecar-configmap
+      optional: false
